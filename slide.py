@@ -13,6 +13,7 @@ H = [i for i in content if i.startswith('H')]
 slide = []
 taken = []
 V_new = []
+lastid = [0]
 
 def generateV(V):
 	V1 = []
@@ -55,17 +56,6 @@ def combineV():
 			if j not in V_new:
 				V_new.append(j)
 		
-	'''	
-def fuse(v):
-	for i in v:
-		set = []
-		a = i[0]
-		b = i[1]
-		a = a.split()
-		b = b.split()
-		for j in a:
-			if j not in b:
-				b.append(j)'''
 				
 		
 def fuseV(A, B):
@@ -91,12 +81,15 @@ def mergeSlides(H,V_new):
 
 
 def slide_generate(A, A_id, pics):
-	t = [(0,0)]				# stores (min,id) pair; compare for min values if the coming is greater include
+	""" stores (min,id) pair; compare for min values if the coming is greater include"""
+	t = [(0,0)]				
 	A = A.split()
 	Aset = A[2:int(A[1])+1]
 	for i in range(0,len(pics)-1):
 		if i is A_id:
 			i = i + 1
+		if pics[i].startswith("Used"):
+			continue
 		union = 0
 		m = 0
 		B = pics[i]
@@ -110,9 +103,12 @@ def slide_generate(A, A_id, pics):
 			t.append((m,i))
 			
 	print(t)
-	B = pics[t[-1][1]]
-	B = B.split()
+	
 	if len(t) > 1:
+		B = pics[t[-1][1]]
+		lastid.append(int(t[-1][1]))
+		B = B.split()
+	
 		if A[-1].startswith('photo'):
 			slide.append(A[-1][5:])
 		else:
@@ -125,15 +121,21 @@ def slide_generate(A, A_id, pics):
 			slide.append(B[-2][5:])
 			slide.append(B[-1])
 	
-	else:
-		#removing the used picture
-		pics.remove(pics[A_id])
-		pics.remove(pics[t[-1][1]])
+		#removing the used picture; adding tag like removing them
+		pics[A_id]= 'Used ' + pics[A_id]
+	
+		
 		
 
 def create_slides(pics):
+	"""
+	last keeps track of the last pic that was appended to the 
+	slide show, which would be the A for the slide_generate function
+	Since we want to start from a point hence we intialised slide with the first pic
+	"""
+	slide.append(pics[0])
 	for i in range(0,len(pics)-1):
-		slide_generate(pics[i],i,pics)
+		slide_generate(pics[lastid[-1]],lastid[-1],pics)
 			
 		
 
@@ -150,4 +152,5 @@ pics = mergeSlides(H,V_new)
 create_slides(pics)
 print("\n")
 
+print("Slides: \n")
 print(slide)
