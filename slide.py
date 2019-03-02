@@ -81,7 +81,8 @@ def mergeSlides(H,V_new):
 
 
 def slide_generate(A, A_id, pics):
-	""" stores (min,id) pair; compare for min values if the coming is greater include"""
+	""" stores (min,id) pair; compare for min values
+	if the next value is greater include"""
 	t = [(0,0)]				
 	A = A.split()
 	Aset = A[2:int(A[1])+1]
@@ -102,7 +103,7 @@ def slide_generate(A, A_id, pics):
 		if t[-1][0] < m:
 			t.append((m,i))
 			
-	print(t)
+	#print(t)
 	
 	if len(t) > 1:
 		B = pics[t[-1][1]]
@@ -123,7 +124,8 @@ def slide_generate(A, A_id, pics):
 	
 		#removing the used picture; adding tag like removing them
 		pics[A_id]= 'Used ' + pics[A_id]
-	
+	print(pics)
+	print(lastid)
 		
 		
 
@@ -133,13 +135,22 @@ def create_slides(pics):
 	slide show, which would be the A for the slide_generate function
 	Since we want to start from a point hence we intialised slide with the first pic
 	"""
-	slide.append(pics[0])
+	slide.append(0)
 	for i in range(0,len(pics)-1):
+		#print("\n 1 \n ")
+		#print(pics[lastid[-1]],lastid[-1],pics)
 		slide_generate(pics[lastid[-1]],lastid[-1],pics)
 			
 		
 
+combineV()
+pics = mergeSlides(H, V_new)
+print(pics)
+create_slides(pics)
 
+print(slide)
+		
+'''	
 print(content)
 print("\n")
 print("\n")
@@ -153,4 +164,4 @@ create_slides(pics)
 print("\n")
 
 print("Slides: \n")
-print(slide)
+print(slide)'''
